@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "887026377565",
+    "firebase_url": "https://minix-79f79.firebaseio.com",
+    "project_id": "minix-79f79",
+    "storage_bucket": "minix-79f79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887026377565:android:42883f9dec5f9199777eb4",
+        "android_client_info": {
+          "package_name": "com.example.minismart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887026377565-tidajglrufph4k0kq60o4imfhm7gjnd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYUZTP9hhg1a0su9xeZnGEDKGvuener-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887026377565-tidajglrufph4k0kq60o4imfhm7gjnd3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887026377565:android:4ba6429b581f57bc777eb4",
+        "android_client_info": {
+          "package_name": "com.example.minismartx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887026377565-tidajglrufph4k0kq60o4imfhm7gjnd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYUZTP9hhg1a0su9xeZnGEDKGvuener-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887026377565-tidajglrufph4k0kq60o4imfhm7gjnd3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887026377565:android:bd88a9695af79311777eb4",
+        "android_client_info": {
+          "package_name": "com.example.myfire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887026377565-tidajglrufph4k0kq60o4imfhm7gjnd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYUZTP9hhg1a0su9xeZnGEDKGvuener-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887026377565-tidajglrufph4k0kq60o4imfhm7gjnd3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
