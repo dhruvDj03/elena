@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.displayLocation_Fragment">
+    tools:context=".Fragments.displayLocation_Fragment"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ImageView
+        android:id="@+id/add_wayPoints"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_gravity="right|end"
+        app:srcCompat="@drawable/add_waypoints" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/display_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+        android:layout_height="624dp"
+        android:layout_gravity="bottom" />
+</LinearLayout>

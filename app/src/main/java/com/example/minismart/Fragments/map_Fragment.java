@@ -8,59 +8,75 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.minismart.FirebaseDatabaseHelper;
+import com.example.minismart.Location;
 import com.example.minismart.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link map_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
+
 public class map_Fragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public map_Fragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment map_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static map_Fragment newInstance(String param1, String param2) {
-        map_Fragment fragment = new map_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_, container, false);
+        View view=inflater.inflate(R.layout.fragment_map_, container, false);
+        SupportMapFragment supportMapFragment=(SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.google_map);
+        supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(final GoogleMap googleMap) {
+
+                new FirebaseDatabaseHelper().readlocation(new FirebaseDatabaseHelper.DataStatus() {
+                    @Override
+                    public void DataIsLoaded(List<Location> locations, List<String> keys) {
+                        LatLng[] location = new LatLng[locations.size()];
+                        for (int i = 0; i < locations.size(); i++) {
+                            location[i] = new LatLng(locations.get(i).getLatitude(), locations.get(i).getLongitude());
+                            MarkerOptions markerOptions = new MarkerOptions().position(location[i]);
+                            System.out.println((locations.get(i).getStatus()));
+                            if ((locations.get(i).getStatus()).compareTo("not working")!=0) {//If Light is Faulty differentiating the markers
+//                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
+//                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_user_location)));
+                                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.blc_point));
+                            }
+                            googleMap.addMarker(markerOptions.title("Marker in location "+locations.get(i).getLatitude()+" "+locations.get(i).getLongitude()+" "+locations.get(i).getStatus()));
+                            googleMap.moveCamera(CameraUpdateFactory.newLatLng(location[i]));
+                            googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+                        }
+
+                    }
+
+
+
+                    @Override
+                    public void DataIsInserted() {
+
+                    }
+
+                    @Override
+                    public void DataIsUpdated() {
+
+                    }
+
+                    @Override
+                    public void DataIsDeleted() {
+
+                    }
+                });
+            }
+        });
+        return view;
+
     }
 }

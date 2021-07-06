@@ -35,8 +35,8 @@ public class RecyclerView_Config {
         }
         public void bind(Location location,String key){
             Log.d("tag",""+location.getLatitude()+" "+location.getLongitude()+" "+location.getStatus());
-            latitude.setText("Latitude "+location.getLatitude()+" ");
-            longitude.setText("Longitude "+location.getLongitude()+" ");
+            latitude.setText(location.getLatitude()+" ");
+            longitude.setText(location.getLongitude()+" ");
             status.setText("Name "+String.valueOf(location.getStatus())+" ");
             this.key=key;
         }

@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@+id/move_left"
+    android:icon="@drawable/left_option"
+    android:title=""
+    />
+
+    <item android:id="@+id/home"
+        android:icon="@drawable/home_option"
+        android:title=""
+        />
+    <item android:id="@+id/setting"
+        android:icon="@drawable/setting_option"
+        android:title=""
+        />
+    <item android:id="@+id/move_right"
+        android:icon="@drawable/right_option"
+        android:title=""
+        />
 
 </menu>

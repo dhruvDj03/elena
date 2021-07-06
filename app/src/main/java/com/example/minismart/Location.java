@@ -1,6 +1,6 @@
 package com.example.minismart;
 
-class Location {
+public class Location {
     private Double latitude;
     private Double longitude;
     private String status;

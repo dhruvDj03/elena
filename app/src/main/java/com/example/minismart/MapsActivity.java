@@ -1,12 +1,15 @@
 package com.example.minismart;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.LocationListener;
@@ -15,11 +18,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.minismart.Fragments.displayLocation_Fragment;
+import com.example.minismart.Fragments.map_Fragment;
+import com.example.minismart.Fragments.menu_Fragment;
+import com.example.minismart.Fragments.route_Fragment;
+import com.example.minismart.Fragments.satellite_Fragment;
+import com.example.minismart.Fragments.trip_Fragment;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -33,6 +45,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,25 +63,126 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private  ArrayList<Integer> longitude;
     private ArrayList<Integer> status;
     private LocationListener locationListener;
-    private LocationManager locationManager;
+     LocationManager locationManager;
     private final long MIN_TIME = 1000;
     private final long MIN_DIST = 5;
+    TextView text_title;
+LinearLayout start_latlong;
+    BottomNavigationView bottomNavigationView;
+  public static Fragment selectorFragment;
+    int current_screen,left_screen,right_screen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        bottomNavigationView=findViewById(R.id.bottom_navigation);
+        text_title=findViewById(R.id.text_title);
+      //  map_layout=findViewById(R.id.map_layout);
+        start_latlong=findViewById(R.id.start_latlon);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull  MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.home:
+                        selectorFragment=new map_Fragment();
+                        current_screen=R.id.fragment_map;
+                        text_title.setText("Map View");
+                        start_latlong.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.setting:
+                        selectorFragment=new displayLocation_Fragment();
+                        current_screen=R.id.settings_frag;
+                        text_title.setText("Settings");
+                        start_latlong.setVisibility(View.INVISIBLE);
+                        break;
+                    case R.id.move_left:
+                       if(current_screen==R.id.fragment_map) {
+                           selectorFragment = new menu_Fragment();
+                           current_screen=R.id.settings_frag;
+                           text_title.setText("Settings");
+                           start_latlong.setVisibility(View.INVISIBLE);
+                       }
+                       else if(current_screen==R.id.satelliite_frag){
+                           selectorFragment=new map_Fragment();
+                           current_screen=R.id.fragment_map;
+                           text_title.setText("Map View");
+                           start_latlong.setVisibility(View.VISIBLE);
+                       }
+                       else if(current_screen==R.id.route_frag){
+                           selectorFragment=new satellite_Fragment();
+                           current_screen=R.id.satelliite_frag;
+                           text_title.setText("Satellite View");
+                           start_latlong.setVisibility(View.INVISIBLE);
+
+                       }
+                       else if(current_screen==R.id.trip_frag){
+                           selectorFragment=new route_Fragment();
+                           current_screen=R.id.route_frag;
+                           text_title.setText("Route Chart");
+                           start_latlong.setVisibility(View.INVISIBLE);
+                       }
+                        break;
+                    case R.id.move_right:
+                        if(current_screen==R.id.fragment_map) {
+                            selectorFragment = new satellite_Fragment();
+                            current_screen=R.id.satelliite_frag;
+                            text_title.setText("Satellite View");
+                            start_latlong.setVisibility(View.INVISIBLE);
+                        }
+                        else if(current_screen==R.id.satelliite_frag){
+                            selectorFragment=new route_Fragment();
+                            current_screen=R.id.route_frag;
+                            text_title.setText("Route Chart");
+                            start_latlong.setVisibility(View.INVISIBLE);
+                        }
+                      else   if(current_screen==R.id.route_frag){
+                            selectorFragment=new trip_Fragment();
+                            left_screen=current_screen;
+                            current_screen=R.id.trip_frag;
+                            text_title.setText("Trip View");
+                            start_latlong.setVisibility(View.INVISIBLE);
+                        }
+                      else if(current_screen==R.id.settings_frag){
+                            selectorFragment=new map_Fragment();
+                            current_screen=R.id.fragment_map;
+                            text_title.setText("Map View");
+                            start_latlong.setVisibility(View.VISIBLE);
+                        }
+                      else if(current_screen==R.id.trip_frag){
+                          current_screen=R.id.trip_frag;
+                        }
+
+         break;
+
+                }
+                if(selectorFragment!=null){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,selectorFragment).commit();
+                }
+                return true;
+            }
+        });
 //        LayoutInflater inflater= (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View view = inflater.inflate(R.layout.activity_displaylocation, null);
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         currentlocation=findViewById(R.id.text2);
+       // image_right=findViewById(R.id.image_right);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
+   /*  image_right.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+             Intent intent=new Intent(MapsActivity.this,displaylocation.class);
+             startActivity(intent);
+         }
+     });
 
+    */
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -137,7 +251,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if ((locations.get(i).getStatus()).compareTo("not working")!=0) {//If Light is Faulty differentiating the markers
 //                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(
 //                                BitmapFactory.decodeResource(getResources(), R.mipmap.ic_user_location)));
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.blc_point));
                     }
                     map.addMarker(markerOptions.title("Marker in location "+locations.get(i).getLatitude()+" "+locations.get(i).getLongitude()+" "+locations.get(i).getStatus()));
                     map.moveCamera(CameraUpdateFactory.newLatLng(location[i]));
